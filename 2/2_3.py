@@ -15,7 +15,9 @@ def download_file(url):
 
 def hash_file(path):
     file = open(path, "rb")
-    return hashlib.sha256(file.read()).hexdigest()
+    digest = hashlib.sha256(file.read()).hexdigest()
+    file.close()
+    return digest
 
 
 # Download the Alpine Linux installation ISO.
