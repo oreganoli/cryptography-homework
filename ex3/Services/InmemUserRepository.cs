@@ -1,4 +1,5 @@
 namespace Services;
+using Exceptions;
 using Models;
 using System.Text;
 /// <summary>
@@ -22,7 +23,7 @@ public class InmemUserRepository : IUserRepository
     {
         if (UserExists(data.Username))
         {
-            throw new InvalidOperationException($"The user {data.Username} already exists.");
+            throw new UserExistsException(data.Username);
         }
         else
         {
