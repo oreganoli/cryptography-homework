@@ -22,3 +22,14 @@ public class User
     /// </summary>
     public string Algorithm { get; set; }
 }
+public class RegisterData
+{
+    /// <summary>
+    /// The new user's username.
+    /// </summary>
+    public string Username { get; set; }
+    /// <summary>
+    /// The plaintext password to register the user with.
+    /// </summary>
+    public string Password { get; set; }
+}
