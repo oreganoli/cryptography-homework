@@ -1,10 +1,18 @@
 using Microsoft.AspNetCore.Mvc;
 using Models;
+using Services;
 
 namespace Controllers;
 [ApiController]
 public class UsersController : Controller
 {
+    private IUserRepository repo;
+
+    public UsersController(IUserRepository repo)
+    {
+        this.repo = repo;
+    }
+
     /// <summary>
     /// Return a view of all users.
     /// </summary>
@@ -12,8 +20,7 @@ public class UsersController : Controller
     [HttpGet("/users")]
     public IActionResult GetAll()
     {
-        // empty data for now
-        return Json(new object[] { });
+        return Json(repo.GetAllUsers());
     }
     /// <summary>
     /// Register a new user.
@@ -23,7 +30,7 @@ public class UsersController : Controller
     [HttpPost("/register")]
     public IActionResult Register(RegisterData data)
     {
-        // stub
+        repo.RegisterUser(data);
         var result = Json($"Successfully created the new user {data.Username}!");
         result.StatusCode = StatusCodes.Status201Created;
         return result;
