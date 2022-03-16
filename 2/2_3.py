@@ -20,6 +20,7 @@ def hash_file(path):
     return digest
 
 
+# Exercise 2
 # Download the Alpine Linux installation ISO.
 iso = download_file(ALPINE_DL_URL)
 iso_hash = hashlib.sha256(iso).hexdigest()
