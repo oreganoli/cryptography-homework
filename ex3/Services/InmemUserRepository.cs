@@ -36,4 +36,11 @@ public class InmemUserRepository : IUserRepository
             });
         }
     }
+
+    public bool Authenticate(string username, string password)
+    {
+        // no hashing yet
+        var passwordBytes = Encoding.UTF8.GetBytes(password);
+        return users.Exists(user => user.Username == username && user.Password.SequenceEqual(passwordBytes));
+    }
 }

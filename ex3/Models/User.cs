@@ -22,6 +22,9 @@ public class User
     /// </summary>
     public string Algorithm { get; set; } = "none";
 }
+/// <summary>
+/// Data used for registering a new user.
+/// </summary>
 public class RegisterData
 {
     /// <summary>
@@ -30,6 +33,21 @@ public class RegisterData
     public string Username { get; set; } = "";
     /// <summary>
     /// The plaintext password to register the user with.
+    /// </summary>
+    public string Password { get; set; } = "";
+}
+
+/// <summary>
+/// Data used for logging in.
+/// </summary>
+public class LoginData
+{
+    /// <summary>
+    /// The claimed username.
+    /// </summary>
+    public string Username { get; set; } = "";
+    /// <summary>
+    /// The plaintext password to authenticate the user with.
     /// </summary>
     public string Password { get; set; } = "";
 }

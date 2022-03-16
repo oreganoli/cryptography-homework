@@ -35,4 +35,17 @@ public class UsersController : Controller
         result.StatusCode = StatusCodes.Status201Created;
         return result;
     }
+    [HttpPost("/login")]
+    public IActionResult Login(LoginData data)
+    {
+        if (repo.Authenticate(data.Username, data.Password))
+        {
+            return new OkResult();
+        }
+        else
+        {
+            // By issuing a blanket 404 we do not give away that a user exists to an attacker.
+            return new NotFoundResult();
+        }
+    }
 }
