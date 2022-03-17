@@ -1,16 +1,25 @@
+using JWT;
 using Microsoft.AspNetCore.Mvc;
 using Exceptions;
 using Models;
 using Services;
+using System.Text;
 
 namespace Controllers;
 [ApiController]
 public class UsersController : Controller
 {
+    private readonly byte[] JwtKey = Encoding.UTF8.GetBytes("example_key_lol_dont_use_in_prod");
+    private IJwtDecoder decoder;
+    private IJwtEncoder encoder;
+    private IJwtValidator validator;
     private IUserRepository repo;
 
-    public UsersController(IUserRepository repo)
+    public UsersController(IJwtDecoder decoder, IJwtEncoder encoder, IJwtValidator validator, IUserRepository repo)
     {
+        this.decoder = decoder;
+        this.encoder = encoder;
+        this.validator = validator;
         this.repo = repo;
     }
 
@@ -41,8 +50,8 @@ public class UsersController : Controller
     {
         if (repo.Authenticate(data.Username, data.Password))
         {
-            // TODO return a JWT
-            return new OkResult();
+            var jwt = encoder.Encode(new { sub = data.Username }, JwtKey);
+            return Json(jwt);
         }
         else
         {
