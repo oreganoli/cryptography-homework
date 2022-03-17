@@ -8,9 +8,9 @@ var app = builder.Build();
 app.UseExceptionHandler(appError => appError.Run(async context =>
 {
     var exception = context.Features.Get<IExceptionHandlerPathFeature>()?.Error;
-    if (exception is UserExistsException)
+    if (exception is AppException ex)
     {
-        context.Response.StatusCode = StatusCodes.Status409Conflict;
+        context.Response.StatusCode = ex.Code;
     }
     var response = new { error = exception?.Message ?? "No error message could be retrieved." };
     await context.Response.WriteAsJsonAsync(response);
