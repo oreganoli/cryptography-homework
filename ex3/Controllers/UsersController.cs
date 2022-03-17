@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
+using Exceptions;
 using Models;
 using Services;
 
@@ -40,12 +41,12 @@ public class UsersController : Controller
     {
         if (repo.Authenticate(data.Username, data.Password))
         {
+            // TODO return a JWT
             return new OkResult();
         }
         else
         {
-            // By issuing a blanket 404 we do not give away that a user exists to an attacker.
-            return new NotFoundResult();
+            throw new LoginFailedException();
         }
     }
 }

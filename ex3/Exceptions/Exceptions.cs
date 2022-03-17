@@ -9,3 +9,7 @@ public class UserExistsException : Exception
     }
     public override string Message => $"The user {Username} already exists";
 }
+public class LoginFailedException : Exception
+{
+    public override string Message => "Invalid username/password combination.";
+}
