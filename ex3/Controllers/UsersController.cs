@@ -36,6 +36,20 @@ public class UsersController : Controller
     [HttpPost("/register")]
     public IActionResult Register(RegisterData data)
     {
+        logic.Register(data.Username, data.Password, "ex2");
+        var result = Json($"Successfully created the new user {data.Username}!");
+        result.StatusCode = StatusCodes.Status201Created;
+        return result;
+    }
+    /// <summary>
+    /// Register a new user in legacy mode, using the Ex.1 password hashing method.
+    /// ☠️ DEPRECATED! ☠️
+    /// </summary>
+    /// <param name="data">A <c>RegisterData</c> object, ie. a username and password.</param>
+    /// <returns>201 OK on success.</returns>
+    [HttpPost("/register_legacy")]
+    public IActionResult RegisterLegacy(RegisterData data)
+    {
         logic.Register(data.Username, data.Password, "ex1");
         var result = Json($"Successfully created the new user {data.Username}!");
         result.StatusCode = StatusCodes.Status201Created;
