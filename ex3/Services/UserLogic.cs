@@ -14,7 +14,13 @@ public class UserLogic : IUserLogic
 
     public void ChangePassword(string username, string oldPassword, string newPassword)
     {
-        throw new NotImplementedException();
+        if (!Validate(username, oldPassword))
+        {
+            throw new NoSuchUserException(username);
+        }
+        var user = repo.ReadUser(username) ?? throw new NoSuchUserException(username);
+        user.Password = System.Text.Encoding.UTF8.GetBytes(newPassword);
+        repo.UpsertUser(user);
     }
 
     public void DeleteAccount(string username)
@@ -49,7 +55,7 @@ public class UserLogic : IUserLogic
         var user = repo.ReadUser(username);
         if (user == null)
         {
-            throw new NoSuchUserException(username);
+            return false;
         }
         return user.Password.SequenceEqual(System.Text.Encoding.UTF8.GetBytes(password)); // TODO
     }
