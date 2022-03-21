@@ -36,7 +36,7 @@ public class UsersController : Controller
     [HttpPost("/register")]
     public IActionResult Register(RegisterData data)
     {
-        logic.Register(data.Username, data.Password, "TODO");
+        logic.Register(data.Username, data.Password, "ex1");
         var result = Json($"Successfully created the new user {data.Username}!");
         result.StatusCode = StatusCodes.Status201Created;
         return result;

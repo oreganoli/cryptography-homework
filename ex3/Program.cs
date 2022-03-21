@@ -7,7 +7,9 @@ builder.Services.AddControllers();
 
 builder.Services.AddSingleton(typeof(IUserRepository), typeof(InmemUserRepository));
 builder.Services.AddSingleton(typeof(IAuthenticationSvc), typeof(AuthenticationSvc));
-builder.Services.AddSingleton(typeof(IHasher), typeof(Ex1Hasher));
+builder.Services.AddSingleton(typeof(Ex1Hasher));
+builder.Services.AddSingleton(typeof(Ex2Hasher));
+builder.Services.AddSingleton(typeof(IHasherProvider), typeof(HasherProvider));
 builder.Services.AddSingleton(typeof(IUserLogic), typeof(UserLogic));
 
 var app = builder.Build();

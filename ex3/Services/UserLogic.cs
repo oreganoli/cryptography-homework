@@ -6,12 +6,12 @@ namespace Services;
 public class UserLogic : IUserLogic
 {
     private IUserRepository repo;
-    private IHasher hasher;
+    private IHasherProvider hasherProvider;
 
-    public UserLogic(IUserRepository repo, IHasher hasher)
+    public UserLogic(IUserRepository repo, IHasherProvider hasherProvider)
     {
         this.repo = repo;
-        this.hasher = hasher;
+        this.hasherProvider = hasherProvider;
     }
 
     public void ChangePassword(string username, string oldPassword, string newPassword)
@@ -25,6 +25,7 @@ public class UserLogic : IUserLogic
             throw new WrongOldPasswordException();
         }
         var user = repo.ReadUser(username) ?? throw new NoSuchUserException(username);
+        var hasher = hasherProvider.GetHasher(user.Algorithm);
         var salt = hasher.ProduceSalt();
         var hash = hasher.Hash(newPassword, salt);
         user.Password = hash;
@@ -47,6 +48,7 @@ public class UserLogic : IUserLogic
         {
             throw new UserExistsException(username);
         }
+        var hasher = hasherProvider.GetHasher(hashMethod);
         var salt = hasher.ProduceSalt();
         var hash = hasher.Hash(password, salt);
         var userData = new User
@@ -66,6 +68,7 @@ public class UserLogic : IUserLogic
         {
             return false;
         }
+        var hasher = hasherProvider.GetHasher(user.Algorithm);
         return hasher.Verify(password, user.Salt, user.Password);
     }
 }
