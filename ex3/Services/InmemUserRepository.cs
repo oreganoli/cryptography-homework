@@ -19,38 +19,21 @@ public class InmemUserRepository : IUserRepository
         return users.Select(each => each.Username).ToList();
     }
 
-    public void RegisterUser(RegisterData data)
+    public void UpsertUser(User user)
     {
-        if (UserExists(data.Username))
+        var existentUser = users.Find(x => x.Username == user.Username);
+        if (existentUser == null)
         {
-            throw new UserExistsException(data.Username);
+            users.Add(user);
         }
         else
         {
-            users.Add(new User
-            {
-                Algorithm = "none",
-                Password = Encoding.UTF8.GetBytes(data.Password),
-                Salt = new byte[] { },
-                Username = data.Username
-            });
+            existentUser = user;
         }
-    }
-
-    public bool Authenticate(string username, string password)
-    {
-        // no hashing yet
-        var passwordBytes = Encoding.UTF8.GetBytes(password);
-        return users.Exists(user => user.Username == username && user.Password.SequenceEqual(passwordBytes));
-    }
-
-    public void UpsertUser(User user)
-    {
-        throw new NotImplementedException();
     }
 
     public User? ReadUser(string username)
     {
-        throw new NotImplementedException();
+        return users.Find(x => x.Username == username);
     }
 }
