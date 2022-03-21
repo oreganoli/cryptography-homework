@@ -11,14 +11,7 @@ builder.Services.AddControllers();
 
 builder.Services.AddSingleton(typeof(IUserRepository), typeof(InmemUserRepository));
 
-var decoder = new JwtDecoder(new JsonNetSerializer(), new JwtBase64UrlEncoder());
-builder.Services.AddSingleton(typeof(IJwtDecoder), decoder);
-
-var encoder = new JwtEncoder(new HMACSHA256Algorithm(), new JsonNetSerializer(), new JwtBase64UrlEncoder());
-builder.Services.AddSingleton(typeof(IJwtEncoder), encoder);
-
-var validator = new JwtValidator(new JsonNetSerializer(), new UtcDateTimeProvider());
-builder.Services.AddSingleton(typeof(IJwtValidator), validator);
+builder.Services.AddSingleton(typeof(IAuthenticationSvc), typeof(AuthenticationSvc));
 
 var app = builder.Build();
 app.UseExceptionHandler(appError => appError.Run(async context =>

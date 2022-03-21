@@ -10,18 +10,13 @@ namespace Controllers;
 [ApiController]
 public class UsersController : Controller
 {
-    private readonly byte[] JwtKey = Encoding.UTF8.GetBytes("example_key_lol_dont_use_in_prod");
-    private IJwtDecoder decoder;
-    private IJwtEncoder encoder;
-    private IJwtValidator validator;
     private IUserRepository repo;
+    private IAuthenticationSvc authSvc;
 
-    public UsersController(IJwtDecoder decoder, IJwtEncoder encoder, IJwtValidator validator, IUserRepository repo)
+    public UsersController(IUserRepository repo, IAuthenticationSvc authSvc)
     {
-        this.decoder = decoder;
-        this.encoder = encoder;
-        this.validator = validator;
         this.repo = repo;
+        this.authSvc = authSvc;
     }
 
     /// <summary>
@@ -51,7 +46,7 @@ public class UsersController : Controller
     {
         if (repo.Authenticate(data.Username, data.Password))
         {
-            var jwt = encoder.Encode(new { sub = data.Username }, JwtKey);
+            var jwt = authSvc.GetJwtForUsername(data.Username);
             return Json(jwt);
         }
         else
@@ -62,14 +57,7 @@ public class UsersController : Controller
     [HttpGet("/whoami")]
     public IActionResult Whoami()
     {
-        var values = Request.Headers["Authorization"];
-        if (!values.Any())
-        {
-            throw new UnauthorizedException();
-        }
-        var jwt = values.First() ?? throw new UnauthorizedException();
-        jwt = jwt.Split(":").Last()?.Split(" ").Last() ?? throw new UnauthorizedException();
-        var userDataJson = decoder.Decode(jwt);
-        return Json(userDataJson);
+        var username = authSvc.GetUsernameFromJwt(HttpContext);
+        return Json($"You are logged in as {username}");
     }
 }
