@@ -43,4 +43,14 @@ public class InmemUserRepository : IUserRepository
         var passwordBytes = Encoding.UTF8.GetBytes(password);
         return users.Exists(user => user.Username == username && user.Password.SequenceEqual(passwordBytes));
     }
+
+    public void UpsertUser(User user)
+    {
+        throw new NotImplementedException();
+    }
+
+    public User? ReadUser(string username)
+    {
+        throw new NotImplementedException();
+    }
 }

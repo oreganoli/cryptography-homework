@@ -10,13 +10,13 @@ namespace Controllers;
 [ApiController]
 public class UsersController : Controller
 {
-    private IUserRepository repo;
     private IAuthenticationSvc authSvc;
+    private IUserLogic logic;
 
-    public UsersController(IUserRepository repo, IAuthenticationSvc authSvc)
+    public UsersController(IAuthenticationSvc authSvc, IUserLogic logic)
     {
-        this.repo = repo;
         this.authSvc = authSvc;
+        this.logic = logic;
     }
 
     /// <summary>
@@ -26,7 +26,7 @@ public class UsersController : Controller
     [HttpGet("/users")]
     public IActionResult GetAll()
     {
-        return Json(repo.GetAllUsers());
+        return Json(logic.ListUsers());
     }
     /// <summary>
     /// Register a new user.
@@ -36,7 +36,7 @@ public class UsersController : Controller
     [HttpPost("/register")]
     public IActionResult Register(RegisterData data)
     {
-        repo.RegisterUser(data);
+        logic.Register(data.Username, data.Password, "TODO");
         var result = Json($"Successfully created the new user {data.Username}!");
         result.StatusCode = StatusCodes.Status201Created;
         return result;
@@ -44,7 +44,7 @@ public class UsersController : Controller
     [HttpPost("/login")]
     public IActionResult Login(LoginData data)
     {
-        if (repo.Authenticate(data.Username, data.Password))
+        if (logic.Validate(data.Username, data.Password))
         {
             var jwt = authSvc.GetJwtForUsername(data.Username);
             return Json(jwt);
