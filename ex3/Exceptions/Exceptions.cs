@@ -8,6 +8,18 @@ public class AppException : Exception
     public virtual int Code { get { return StatusCodes.Status500InternalServerError; } }
 }
 
+public class NoSuchUserException : AppException
+{
+    public override int Code { get { return StatusCodes.Status404NotFound; } }
+    public string Username { get; set; } = "";
+
+    public NoSuchUserException(string username)
+    {
+        Username = username;
+    }
+    public override string Message => $"The user {Username} does not exist";
+}
+
 public class UserExistsException : AppException
 {
     public override int Code { get { return StatusCodes.Status409Conflict; } }

@@ -36,4 +36,9 @@ public class InmemUserRepository : IUserRepository
     {
         return users.Find(x => x.Username == username);
     }
+
+    public void DeleteUser(string username)
+    {
+        users.RemoveAll(x => x.Username == username);
+    }
 }

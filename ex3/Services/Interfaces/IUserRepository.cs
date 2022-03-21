@@ -29,4 +29,10 @@ public interface IUserRepository
     /// <param name="username">Username to search for.</param>
     /// <returns>True or false.</returns>
     bool UserExists(string username);
+
+    /// <summary>
+    /// Deletes the given user.
+    /// </summary>
+    /// <param name="username">Username.</param>
+    void DeleteUser(string username);
 }
