@@ -48,3 +48,16 @@ public class UnauthorizedException : AppException
     public override int Code { get { return StatusCodes.Status401Unauthorized; } }
     public override string Message => "You are not logged in or your JWT was malformed.";
 }
+
+public class UnsupportedAlgorithmException : AppException
+{
+    public override int Code { get { return StatusCodes.Status501NotImplemented; } }
+    public string Algorithm;
+
+    public UnsupportedAlgorithmException(string algorithm)
+    {
+        Algorithm = algorithm;
+    }
+
+    public override string Message => $"\"{Algorithm}\" is not a supported hashing algorithm.";
+}
