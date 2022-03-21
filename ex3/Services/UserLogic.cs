@@ -47,6 +47,7 @@ public class UserLogic : IUserLogic
             Salt = new byte[] { }, // TODO
             Username = username
         };
+        repo.UpsertUser(userData);
     }
 
     public bool Validate(string username, string password)
