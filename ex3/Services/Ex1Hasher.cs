@@ -23,6 +23,6 @@ public class Ex1Hasher : IHasher
 
     public bool Verify(string password, byte[] salt, byte[] hash)
     {
-        return Hash(password, salt) == hash;
+        return Hash(password, salt).SequenceEqual(hash);
     }
 }
