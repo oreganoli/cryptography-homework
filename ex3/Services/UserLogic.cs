@@ -6,10 +6,12 @@ namespace Services;
 public class UserLogic : IUserLogic
 {
     private IUserRepository repo;
+    private IHasher hasher;
 
-    public UserLogic(IUserRepository repo)
+    public UserLogic(IUserRepository repo, IHasher hasher)
     {
         this.repo = repo;
+        this.hasher = hasher;
     }
 
     public void ChangePassword(string username, string oldPassword, string newPassword)
@@ -23,7 +25,9 @@ public class UserLogic : IUserLogic
             throw new WrongOldPasswordException();
         }
         var user = repo.ReadUser(username) ?? throw new NoSuchUserException(username);
-        user.Password = System.Text.Encoding.UTF8.GetBytes(newPassword);
+        var salt = hasher.ProduceSalt();
+        var hash = hasher.Hash(newPassword, salt);
+        user.Password = hash;
         repo.UpsertUser(user);
     }
 
@@ -43,12 +47,13 @@ public class UserLogic : IUserLogic
         {
             throw new UserExistsException(username);
         }
-        // TODO: actual hashing
+        var salt = hasher.ProduceSalt();
+        var hash = hasher.Hash(password, salt);
         var userData = new User
         {
-            Algorithm = "TODO",
-            Password = System.Text.Encoding.UTF8.GetBytes(password), // TODO
-            Salt = new byte[] { }, // TODO
+            Algorithm = "ex1",
+            Password = hash,
+            Salt = salt,
             Username = username
         };
         repo.UpsertUser(userData);
@@ -56,12 +61,11 @@ public class UserLogic : IUserLogic
 
     public bool Validate(string username, string password)
     {
-        // TODO: hashing.
         var user = repo.ReadUser(username);
         if (user == null)
         {
             return false;
         }
-        return user.Password.SequenceEqual(System.Text.Encoding.UTF8.GetBytes(password)); // TODO
+        return hasher.Verify(password, user.Salt, user.Password);
     }
 }
