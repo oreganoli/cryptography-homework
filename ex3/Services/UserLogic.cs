@@ -51,7 +51,7 @@ public class UserLogic : IUserLogic
         var hash = hasher.Hash(password, salt);
         var userData = new User
         {
-            Algorithm = "ex1",
+            Algorithm = hashMethod,
             Password = hash,
             Salt = salt,
             Username = username
