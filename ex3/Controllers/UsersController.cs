@@ -4,6 +4,7 @@ using Exceptions;
 using Models;
 using Services;
 using System.Text;
+using System.Text.Json;
 
 namespace Controllers;
 [ApiController]
@@ -57,5 +58,18 @@ public class UsersController : Controller
         {
             throw new LoginFailedException();
         }
+    }
+    [HttpGet("/whoami")]
+    public IActionResult Whoami()
+    {
+        var values = Request.Headers["Authorization"];
+        if (!values.Any())
+        {
+            throw new UnauthorizedException();
+        }
+        var jwt = values.First() ?? throw new UnauthorizedException();
+        jwt = jwt.Split(":").Last()?.Split(" ").Last() ?? throw new UnauthorizedException();
+        var userDataJson = decoder.Decode(jwt);
+        return Json(userDataJson);
     }
 }

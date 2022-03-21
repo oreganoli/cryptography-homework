@@ -24,3 +24,9 @@ public class LoginFailedException : AppException
     public override int Code { get { return StatusCodes.Status404NotFound; } }
     public override string Message => "Invalid username/password combination.";
 }
+
+public class UnauthorizedException : AppException
+{
+    public override int Code { get { return StatusCodes.Status401Unauthorized; } }
+    public override string Message => "You are not logged in or your JWT was malformed.";
+}
