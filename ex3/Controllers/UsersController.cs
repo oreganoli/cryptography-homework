@@ -60,4 +60,11 @@ public class UsersController : Controller
         var username = authSvc.GetUsernameFromJwt(HttpContext);
         return Json($"You are logged in as {username}");
     }
+    [HttpDelete("/deleteAccount")]
+    public IActionResult DeleteAccount()
+    {
+        var username = authSvc.GetUsernameFromJwt(HttpContext);
+        logic.DeleteAccount(username);
+        return new NoContentResult();
+    }
 }
