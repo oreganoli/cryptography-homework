@@ -2,7 +2,7 @@ namespace Services;
 using System.Text;
 using System.Security.Cryptography;
 /// <summary>
-/// Implements the requirements for exercise 1: a "simple" hashing method. We picked MF5 here precisely because it is "simple" and not recommended.
+/// Implements the requirements for exercise 1: a "simple" hashing method. We picked MD5 here precisely because it is "simple" and not recommended.
 /// </summary>
 public class Ex1Hasher : IHasher
 {
