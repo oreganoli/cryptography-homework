@@ -51,3 +51,11 @@ public class LoginData
     /// </summary>
     public string Password { get; set; } = "";
 }
+/// <summary>
+/// Data used for changing one's password.
+/// </summary>
+public class ChangePasswordData
+{
+    public string OldPassword { get; set; } = "";
+    public string NewPassword { get; set; } = "";
+}

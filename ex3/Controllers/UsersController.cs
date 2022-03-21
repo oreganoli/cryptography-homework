@@ -67,4 +67,11 @@ public class UsersController : Controller
         logic.DeleteAccount(username);
         return new NoContentResult();
     }
+    [HttpPut("/password")]
+    public IActionResult ChangePassword(ChangePasswordData data)
+    {
+        var username = authSvc.GetUsernameFromJwt(HttpContext);
+        logic.ChangePassword(username, data.OldPassword, data.NewPassword);
+        return new NoContentResult();
+    }
 }
