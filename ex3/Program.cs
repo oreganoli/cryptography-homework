@@ -1,17 +1,13 @@
-using JWT;
 using Exceptions;
 using Microsoft.AspNetCore.Diagnostics;
 using Services;
-using JWT.Algorithms;
-using JWT.Serializers;
-
 
 var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllers();
 
 builder.Services.AddSingleton(typeof(IUserRepository), typeof(InmemUserRepository));
-
 builder.Services.AddSingleton(typeof(IAuthenticationSvc), typeof(AuthenticationSvc));
+builder.Services.AddSingleton(typeof(IUserLogic), typeof(UserLogic));
 
 var app = builder.Build();
 app.UseExceptionHandler(appError => appError.Run(async context =>
