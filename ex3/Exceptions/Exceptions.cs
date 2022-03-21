@@ -8,6 +8,12 @@ public class AppException : Exception
     public virtual int Code { get { return StatusCodes.Status500InternalServerError; } }
 }
 
+public class WrongOldPasswordException : AppException
+{
+    public override int Code { get { return StatusCodes.Status401Unauthorized; } }
+    public override string Message => "The old password provided was invalid.";
+}
+
 public class NoSuchUserException : AppException
 {
     public override int Code { get { return StatusCodes.Status404NotFound; } }

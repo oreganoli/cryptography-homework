@@ -14,9 +14,13 @@ public class UserLogic : IUserLogic
 
     public void ChangePassword(string username, string oldPassword, string newPassword)
     {
-        if (!Validate(username, oldPassword))
+        if (!repo.UserExists(username))
         {
             throw new NoSuchUserException(username);
+        }
+        if (!Validate(username, oldPassword))
+        {
+            throw new WrongOldPasswordException();
         }
         var user = repo.ReadUser(username) ?? throw new NoSuchUserException(username);
         user.Password = System.Text.Encoding.UTF8.GetBytes(newPassword);
